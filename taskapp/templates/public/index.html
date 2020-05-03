@@ -1,0 +1,16 @@
+{% extends "layouts/base.html" %}
+
+{%- block main %}
+        <div class="jumbotron">
+            <h1>Task Distribution System</h1>
+            <p class="lead">The task distribution system will automatically off-load all tasks onto registered clusters.</p>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-offset-4">
+                    <p><a class="btn btn-lg btn-success btn-raised" href={{url_for('public.signup')}} role="button">Sign up</a></p>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-offset-0">
+                    <p><a class="btn btn-lg btn-success btn-raised" href={{url_for('public.login')}} role="button">Log in</a></p>
+                </div>
+            </div>
+        </div>
+{%- endblock %}

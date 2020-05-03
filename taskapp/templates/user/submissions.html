@@ -1,0 +1,74 @@
+{% extends "layouts/base.html" %}
+{% import "layouts/macros.html" as macros %}
+{% import "layouts/wtf.html" as wtf %}
+{% block styles -%}
+    {{super()}}
+    <link rel="stylesheet" href={{url_for('static', filename='css/prism.css')}}>
+{%- endblock %}
+
+{% block navbar %}
+    <!-- Entry text modal -->
+    <div id="entry-text-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="entry-text-modal-label">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 id="entry-text-modal-label" class="modal-title">Entry Result</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{%- block main %}
+    <div class="row">
+        <div class="sidebar">
+            {{ macros.show_flash() }}
+            <ul class="nav nav-sidebar">
+                <!--<div class="btn-group btn-group-justified"> -->
+                <li id="submit-btn">
+                    <a href="#">Submit Script</a>
+                </li>
+                <li id="view-btn">
+                    <a href="#">Your Scripts</a>
+                </li>
+                <li id="sim-btn">
+                    <a href="#">Your Simulations</a>
+                </li>
+                <li id="all-sim-btn">
+                    <a href="#">All Simulations</a>
+                </li>
+                <!--</div>-->
+            </ul>
+        </div>
+
+        <div class="col-sm-10 col-sm-offset-2 main">
+            <h1 class="page-header">Submission Data</h1>
+            <!--<select id="device-select" class="form-control">
+                {% for sub in submissions -%}
+                <option value="{{ sub.sub_id }}"
+                {%- if request.args.get('id')|int == sub.sub_id|int %} selected="selected"{%- endif -%}
+                >{{ sub.get_name() }}</option>
+                {% endfor %}
+            </select>-->
+            <div>
+                {{ macros.show_flash() }}
+                {{ wtf.quick_form(form, button_map={'submit_button': 'primary'}, enctype='multipart/form-data') }}  
+            </div>
+            <div id="display-area"></div>
+        </div>
+    </div>
+{% endblock -%}
+
+{% block scripts %}
+    {{super()}}
+    <script src={{url_for('static', filename='js/app.js')}}></script>
+    <script src={{url_for('static', filename='js/prism.js')}}></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/pagination.js') }}"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
+{% endblock %}

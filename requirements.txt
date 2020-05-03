@@ -1,0 +1,11 @@
+flask
+werkzeug
+flask-login
+flask-wtf
+sqlalchemy
+itsdangerous
+wtforms
+click
+requests
+numpy
+flask-socketio

@@ -1,0 +1,10 @@
+<div class="alert alert-{{ 
+{'Pending':'info', 'Pass':'success', 'Fail':'warning', 'Error':'danger'
+}[problem.result] }}">{{ problem.result }}</div>
+<pre>
+    {%- if problem.grader_output -%}
+        {{ problem.grader_output }}
+    {%- elif problem.result == 'Pending' -%}
+        Your submission is in the queue to be graded.
+    {%- endif -%}
+</pre>

@@ -1,0 +1,36 @@
+{% import "layouts/macros.html" as macros %}
+
+{% if simulations and simulations.count() > 0 -%}
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Script Name</th>
+            <th>Has Started</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Has Error</th>
+            <th>Node Id</th>
+        </tr>
+    </thead>
+    <tbody class="list">
+        {% for sim in simulations -%}
+        <tr data-sim-id={{sim.simulation_id}}>
+            <td >{{ sim.user.name }}</td>
+            <td >{{ sim.submission.high_level_script_name }}</td>
+            <td >{{ sim.has_started }}</td>
+            <td >{{ sim.start_time }} </td>
+            <td >{{ sim.end_time }}</td>
+            <td >{{ sim.has_error }}</td>
+            <td >{{ sim.node_id }}</td>
+
+        </tr>
+        {%- endfor %}
+    </tbody>
+</table>
+
+<small class="text-muted">Click a row for more info</small>
+{%- else -%}
+<h3 class="text-center">There are no entries for this device</h3>
+{%- endif %}
+

@@ -1,0 +1,37 @@
+{% import "layouts/macros.html" as macros %}
+
+{% if submissions and submissions.count() > 0 -%}
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Script Name</th>
+            <th>Script Version</th>
+            <th>Simulation Version</th>
+            <th>Submission Time</th>
+            <th>Start Time</th>
+            <th>Completion Time</th>
+            <th>Error</th>
+        </tr>
+    </thead>
+    <tbody class="list">
+        {% for sub in submissions -%}
+        <tr data-sub-id={{sub.sub_id}}>
+            <td >{{ sub.user.name }}</td>
+            <td >{{ sub.high_level_script_name }}</td>
+            <td >{{ sub.high_level_script_version }} </td>
+            <td >{{ sub.simulation_version }} </td>
+            <td >{{ sub.submission_time }}</td>
+            <td >{{ sub.start_time }}</td>
+            <td >{{ sub.completion_time }}</td>
+            <td >{{ sub.has_error }}</td>
+        </tr>
+        {%- endfor %}
+    </tbody>
+</table>
+
+<small class="text-muted">Click a row for more info</small>
+{%- else -%}
+<h3 class="text-center">There are no entries for this device</h3>
+{%- endif %}
+
