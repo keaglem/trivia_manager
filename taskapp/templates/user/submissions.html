@@ -57,8 +57,22 @@
                 {% endfor %}
             </select>-->
             <div>
+                {%- if form -%}
                 {{ macros.show_flash() }}
-                {{ wtf.quick_form(form, button_map={'submit_button': 'primary'}, enctype='multipart/form-data') }}  
+                <form class="form form-horizontal" method="post" role="form">
+                    {{ form.hidden_tag() }}
+                    {{ wtf.form_errors(form, hiddens="only") }}
+                    {% for form_field in form.prompts %}
+                        {% for sub_field in form_field %}
+                            {{ wtf.form_field(sub_field) }}
+                        {% endfor %}
+                    {% endfor %}
+                    {{ wtf.form_field(form.submit, button_map={'submit_button': 'primary'}) }}
+                  </form>
+                {%- else -%}
+                  {{ answer }}
+                {% endif %}
+
             </div>
             <div id="display-area"></div>
         </div>

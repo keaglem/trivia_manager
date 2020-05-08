@@ -102,11 +102,11 @@ class Question(Base):
     question_number = db.Column(db.Integer)
     game_id = db.Column(db.ForeignKey('game.id'))
 
-    game = db.orm.relationship(
-        'Game',
-        primaryjoin='Question.game_id == Game.id',
-        backref=db.orm.backref('questions', lazy='dynamic', collection_class=list)
-    )
+    #game = db.orm.relationship(
+    #    'Game',
+    #    primaryjoin='Question.game_id == Game.id',
+    #    backref=db.orm.backref('questions', lazy='dynamic', collection_class=list)
+    #)
 
     _serialize_field = ['id'
                         ]

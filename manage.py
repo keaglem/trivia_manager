@@ -44,10 +44,13 @@ def init_db():
 
     db_session.add(new_prompt)
     db_session.add(new_question)
-    
 
     db_session.commit()
 
+    #question_1 = Question.query.filter(Question.question_number == 1).one()
+    #current_game = Game.query.filter(Game.active == True).one()
+    #current_game.current_question = question_1
+    #db_session.commit()
 
 @click.command()
 @click.option('--host', default='127.0.0.1', help='IP address to bind webserver.  Localhost or local IP')

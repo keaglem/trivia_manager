@@ -34,12 +34,17 @@ def question(question_id=None):
     prompts = question.prompts
     
     form = forms.QuestionForm()
-    for prompt in prompts:
-        form.prompts.append_entry(forms.PromptForm(question=prompt.question))
+    
 
     if form.validate_on_submit():
-        print('Thanks for the answer')
-        return render_template('user/submissions.html')
+        answer = (f"Thanks for the answer {form.data['prompts'][0]['question']}")
+        return render_template('user/submissions.html', answer=answer)
+
+    form.prompts.pop_entry()
+    for idx, prompt in enumerate(prompts):
+        form.prompts.append_entry()
+        form.prompts[idx].question.label.text = prompt.prompt
+
     return render_template('user/submissions.html', form=form)
 
 
