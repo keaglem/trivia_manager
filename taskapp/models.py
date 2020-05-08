@@ -100,7 +100,7 @@ class Question(Base):
     __tablename__ = 'question'
     id = db.Column(db.Integer, primary_key=True)
     question_number = db.Column(db.Integer)
-    game_id = db.Column(db.ForeignKey('game.id'))
+    #game_id = db.Column(db.ForeignKey('game.id'))
 
     #game = db.orm.relationship(
     #    'Game',
@@ -129,7 +129,14 @@ class Answer(Base):
     id = db.Column(db.Integer, primary_key=True)
     question_id = db.Column(db.ForeignKey('question.id'))
     user_id = db.Column(db.ForeignKey('user.id'))
-    answer = db.String(256)
+    received_answer = db.Column(db.String(256))
+    prompt_id = db.Column(db.ForeignKey('prompt.id'))
+    points_received = db.Column(db.Integer)
+
+    prompt = db.orm.relationship(
+        'Prompt',
+        backref=db.orm.backref('answers', lazy='dynamic', collection_class=list)
+    )
 
     user = db.orm.relationship(
         'User',
@@ -151,6 +158,8 @@ class Prompt(Base):
 
     prompt = db.Column(db.String(256), nullable=False)
     answer = db.Column(db.String(256), nullable=False)
+
+    point_value = db.Column(db.Integer, nullable=False)
 
     question = db.orm.relationship(
         'Question',

@@ -5,7 +5,7 @@ try:
 except:
     from flask.ext.login import current_user, login_required
 from . import forms
-from taskapp.models import User
+from taskapp.models import User, Answer, Question
 from taskapp.extensions import db_session
 import numpy
 import datetime
@@ -37,8 +37,23 @@ def question(question_id=None):
     
 
     if form.validate_on_submit():
-        answer = (f"Thanks for the answer {form.data['prompts'][0]['question']}")
-        return render_template('user/submissions.html', answer=answer)
+        received_values = form.data['prompts']
+        print_answers = []
+        for answers, prompts in zip(received_values, question.prompts):
+            answer = answers['question']
+            new_answer = Answer(received_answer=answer,
+                                question=question,
+                                user=current_user)
+            db_session.add(new_answer)
+            db_session.commit()
+
+            if answer.lower() in prompts.answer.lower():
+                response_string = 'Correct!'
+            else:
+                response_string = 'Not quite, pending judge review.'
+
+            print_answers.append(f"Thanks for submitting: {' ... '.join([answer, response_string])}")
+        return render_template('user/submissions.html', answer='\n'.join(print_answers))
 
     form.prompts.pop_entry()
     for idx, prompt in enumerate(prompts):
