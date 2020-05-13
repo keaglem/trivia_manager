@@ -18,7 +18,7 @@ def index():
     return render_template('public/index.html')
 
 @blueprint.route('/login', methods=['GET', 'POST'])
-@redirect_logged_in('api.question')
+@redirect_logged_in('user.questions')
 def login():
     form = forms.LoginForm()
 
@@ -26,7 +26,7 @@ def login():
         user = User.authenticate(form.login.data, form.password.data)
         if user:
             login_user(user, remember=bool(form.remember_me.data))
-            return redirect(request.args.get('next') or url_for('api.question'))
+            return redirect(request.args.get('next') or url_for('user.questions'))
         else:
             flash('Invalid username or password', 'danger')
     return render_template('public/login.html', form=form)
@@ -45,11 +45,11 @@ def signup():
             db_session.add(user)
             db_session.commit()
             login_user(user)
-            return redirect(url_for('api.question'))
+            return redirect(url_for('user.questions'))
     return render_template('public/signup.html', form=form)
 
 @blueprint.route('/login/forgot', methods=['GET', 'POST'])
-@redirect_logged_in('user.submissions')
+@redirect_logged_in('user.questions')
 def forgot_password():
     form = forms.ForgotPasswordForm()
 
@@ -67,7 +67,7 @@ def forgot_password():
     return render_template('public/forgot_password.html', form=form, submitted=submitted)
 
 @blueprint.route('/login/change', methods=['GET', 'POST'])
-@redirect_logged_in('user.submissions')
+@redirect_logged_in('user.questions')
 def password_change():
     token = request.args.get('token')
     if not token:
@@ -86,7 +86,7 @@ def password_change():
 
         flash('Password updated.', 'success')
         login_user(user)
-        return redirect(url_for('user.problems'))
+        return redirect(url_for('user.questions'))
     return render_template('public/password_change.html', form=form)
 
 @blueprint.route("/logout")

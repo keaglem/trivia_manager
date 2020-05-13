@@ -31,19 +31,26 @@ def init_db():
     db_session.add(new_game)
     db_session.commit()
 
+    
 
-    new_prompt = Prompt()
-    new_prompt.prompt = 'First Prompt?'
-    new_prompt.answer = 'Correct Answer'
+    num_questions = 5
+    num_prompts = 2
 
-    new_question = Question()
-    new_question.prompts.append(new_prompt)
-    new_question.question_number = 1
-    new_question.game = new_game
-    new_game.current_question = new_question
+    for idx_question in range(num_questions):
+        new_question = Question()
+        for idx in range(num_prompts):
+            new_prompt = Prompt()
+            new_prompt.prompt = f'Prompt # {idx_question*num_prompts+idx}'
+            new_prompt.answer = f'Correct Answer {idx}'
+            new_prompt.point_value = 3
+            new_question.prompts.append(new_prompt)
+            db_session.add(new_prompt)
 
-    db_session.add(new_prompt)
-    db_session.add(new_question)
+        new_question.question_number = idx_question + 1
+        new_question.game = new_game
+        db_session.add(new_question)
+        if idx_question == 0:
+            new_game.current_question = new_question
 
     db_session.commit()
 

@@ -118,12 +118,6 @@ class Question(Base):
         return return_dict
 
 
-
-
-
-
-
-
 class Answer(Base):
     __tablename__ = 'answer'
     id = db.Column(db.Integer, primary_key=True)

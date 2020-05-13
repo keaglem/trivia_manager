@@ -11,15 +11,25 @@ import numpy
 import datetime
 from flask_socketio import emit
 from .. import app
-from ..utils import get_current_question
+from ..utils import get_current_question, get_current_game
 
 blueprint = Blueprint('api', __name__, url_prefix='/api', static_folder='../static')
 
     
+@blueprint.route('/set_current_question/<int:question_id>', methods=['POST'])
+def set_current_question(question_id=None):
+    question = Question.query.filter(Question.id == question_id).one_or_none()
+    if question:
+        get_current_game().current_question = question
+        send_current_question(question_id)
+        db_session.commit()
 
+    return 'success'
 
-def send_active_jobs():
-    app.app_runner.emit('active jobs', {'num_jobs': get_total_active_jobs()}, namespace='/live_connect')
+def send_current_question(current_question_id=None):
+    if not current_question_id:
+        current_question_id = get_current_question().id
+    app.app_runner.emit('current question', {'question_id': current_question_id}, namespace='/live_connect')
 
 @blueprint.route('/question', methods=['GET', 'POST'])
 @blueprint.route('/question/<int:question_id>', methods=['GET', 'POST'])
@@ -29,12 +39,11 @@ def question(question_id=None):
     question = get_current_question()
 
     if not question:
-        return render_template('user/submissions.html')
+        return render_template('api/questions.html')
 
     prompts = question.prompts
     
     form = forms.QuestionForm()
-    
 
     if form.validate_on_submit():
         received_values = form.data['prompts']
@@ -53,13 +62,13 @@ def question(question_id=None):
                 response_string = 'Not quite, pending judge review.'
 
             print_answers.append(f"Thanks for submitting: {' ... '.join([answer, response_string])}")
-        return render_template('user/submissions.html', answer='\n'.join(print_answers))
+        return render_template('user/questions.html', answer='\n'.join(print_answers))
 
     form.prompts.pop_entry()
     for idx, prompt in enumerate(prompts):
         form.prompts.append_entry()
         form.prompts[idx].question.label.text = prompt.prompt
 
-    return render_template('user/submissions.html', form=form)
+    return render_template('api/questions.html', form=form)
 
 

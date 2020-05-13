@@ -2,11 +2,9 @@ var s, socket,
 App = {
     settings: {
         displayArea: $('#display-area'),
-        viewButton: $('#view-btn'),
-        simButton: $('#sim-btn'),
-        allSimButton: $('#all-sim-btn'),
-        submitButton: $('#submit-btn'),
-        lastClicked: $('#view-btn'),
+        questionButton: $('#question-btn'),
+        answerArea: $('#answer-area'),
+        lastClicked: $('#question-btn'),
         topNavBar: $('#top-nav-bar'),
         connectedStatus: $('#connected-status'),
         jobStatus: $('#job-status')
@@ -16,7 +14,7 @@ App = {
         s = this.settings;
         socket = io.connect('http://' + document.domain + ':' + location.port + '/live_connect');
         socket.on('connect', function() {
-            s.jobStatus.text('0 remaining jobs');
+            s.jobStatus.text('Welcome!');
             s.connectedStatus.text('Connected');
             socket.emit('my event', {data: 'I\'m connected!'});
         });
@@ -27,6 +25,11 @@ App = {
         socket.on('active jobs', function(inputData) {
             s.jobStatus.text(inputData.num_jobs + ' remaining jobs');
         });
+        socket.on('current question', function(inputData) {
+            s.jobStatus.text('Current question: ' + inputData.question_id + '.');
+            s.answerArea.empty();
+            s.questionButton.click();
+        });
 
         this.bindUIActions();
         this.updateDisplay();
@@ -34,20 +37,7 @@ App = {
 
 
     bindUIActions: function() {
-        s.viewButton.click(App.handleButtonClick(App.showSubmissions));
-        s.submitButton.click(App.handleButtonClick(App.showSubmit));
-        s.simButton.click(App.handleButtonClick(App.showSimulations));
-        s.allSimButton.click(App.handleButtonClick(App.showAllSimulations));
-        // TODO: add this functionality back for cluster display
-        //s.deviceSelect.change(App.updateDisplay);
-    },
-
-    getValidURI: function(base, id) {
-        if(typeof(id)==='undefined') 
-            return base;
-        if (id === null)
-            return base;
-        return base + '/' + id;
+        s.questionButton.click(App.handleButtonClick(App.showQuestions));
     },
 
     loadNoCache: function(elem, url, success) {
@@ -73,25 +63,8 @@ App = {
             return displayCallback();
         }
     },
-    showSubmissionText: function(e) {
-        id = $(this).data('subId');
-        s.displayArea.load(App.getValidURI('/api/simulations',id))
-    },
-    showSubmit: function(e) {
-        s.displayArea.load('/api/upload')
-    },
-    showSimulations: function(e) {
-        s.displayArea.load('/api/simulations')
-
-    },
-    showAllSimulations: function(e) {
-        s.displayArea.load('/api/all_simulations')
-    },
-    showSubmissions: function(e) {
-        s.displayArea.load('/api/submissions');
-        App.loadNoCache(s.displayArea, '/api/submissions', function (){
-            $('tr[data-sub-id]').click(App.showSubmissionText)
-        })
+    showQuestions: function(e) {
+        s.displayArea.load('/api/question');
     },
 
 

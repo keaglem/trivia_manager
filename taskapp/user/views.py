@@ -18,6 +18,12 @@ def load_user(id):
     return User.query.get(int(id))
     
 
+@blueprint.route('/questions', methods=['GET', 'POST'])
+@login_required
+def questions():
+    return render_template('user/questions.html')
+
+
 @blueprint.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():

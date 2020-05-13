@@ -18,7 +18,7 @@
         <div class="container-fluid" id="top-nav-bar">
             <div class="navbar-header navbar-brand">
                 {%- if current_user.is_authenticated -%}
-                    <a href={{url_for('api.question')}} >
+                    <a href={{url_for('user.questions')}} >
                 {%- else -%}
                     <a href={{url_for('public.index')}} >
                 {%- endif -%}
