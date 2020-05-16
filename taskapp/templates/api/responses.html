@@ -1,0 +1,50 @@
+{% import "layouts/macros.html" as macros %}
+<h1 class="page-header">All Responses</h1>
+
+{% if all_questions and all_questions|length > 0 -%}
+{% for question in all_questions -%}
+    <div id="question-{{question.question_number}}"> 
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Question {{question.question_number}}</h1>
+            </div>
+            <div class="col">
+                <a class="current-question-btn btn btn-lg btn-success btn-raised" id="{{ question.question_number }}" role="button">Set Current Question</a>
+            </div>
+        </div>
+    </div>
+    {% for prompt in question.prompts -%}
+        <div class="well">
+            <h3>Prompt: {{prompt.prompt}}</h3>
+            <h3>Correct Answer: {{prompt.answer}}</h3>
+            <table id="prompt-{{prompt.id}}" class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Answer</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody class="list">
+                    {% for answer in prompt.answers -%}
+                    <tr data-prompt-id={{answer.id}}>
+                        <td >{{ answer.user.name }}</td>
+                        <td >{{ answer.received_answer }}</td>
+                        <td >{{ answer.points_received }}</td>
+                    </tr>
+                    {%- endfor %}
+                </tbody>
+            </table>
+        </div>
+    {%- endfor %}
+    </div> 
+{%- endfor %}
+{%- else -%}
+<h3 class="text-center">There are no questions for this game</h3>
+{%- endif %}
+<script type="text/javascript">
+    $('.current-question-btn').click(function() {
+        $.post('api/set_current_question/' + this.id);
+    })
+</script>

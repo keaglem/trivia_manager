@@ -60,7 +60,7 @@ def init_db():
     #db_session.commit()
 
 @click.command()
-@click.option('--host', default='127.0.0.1', help='IP address to bind webserver.  Localhost or local IP')
+@click.option('--host', default='0.0.0.0', help='IP address to bind webserver.  Localhost or local IP')
 @click.option('--port', default=5000, help='Port number for web-server')
 def main_function(host, port):
     app_runner.run(app=app, host=host, port=port)

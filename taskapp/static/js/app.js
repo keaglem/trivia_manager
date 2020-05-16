@@ -3,6 +3,7 @@ App = {
     settings: {
         displayArea: $('#display-area'),
         questionButton: $('#question-btn'),
+        responsesButton: $('#responses-btn'),
         answerArea: $('#answer-area'),
         lastClicked: $('#question-btn'),
         topNavBar: $('#top-nav-bar'),
@@ -27,8 +28,22 @@ App = {
         });
         socket.on('current question', function(inputData) {
             s.jobStatus.text('Current question: ' + inputData.question_id + '.');
-            s.answerArea.empty();
-            s.questionButton.click();
+            if (s.lastClicked == s.questionButton[0]) {
+                s.answerArea.empty();
+                s.questionButton.click();
+            }            
+        });
+        socket.on('question answered', function(inputData) {
+            inputData.forEach(function (item, idx) {
+                $('#prompt-'+item.prompt_id + ' > tbody')
+                    .append($('<tr>').attr('data-prompt-id', item.answer_id)
+                        .append($('<td>')
+                            .text(item.user_name))
+                        .append($('<td>')
+                            .text(item.received_answer))
+                        .append($('<td>')
+                            .text(item.points_received)));
+            });
         });
 
         this.bindUIActions();
@@ -38,6 +53,7 @@ App = {
 
     bindUIActions: function() {
         s.questionButton.click(App.handleButtonClick(App.showQuestions));
+        s.responsesButton.click(App.handleButtonClick(App.showResponses));
     },
 
     loadNoCache: function(elem, url, success) {
@@ -66,7 +82,10 @@ App = {
     showQuestions: function(e) {
         s.displayArea.load('/api/question');
     },
-
+    showResponses: function(e) {
+        s.answerArea.empty();
+        s.displayArea.load('/api/responses');
+    },
 
 };
 

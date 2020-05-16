@@ -35,13 +35,17 @@
                 <li id="question-btn">
                     <a href="#">Questions</a>
                 </li>
+                <li id="responses-btn">
+                    <a href="#">Responses</a>
+                </li>
+                <li id="scoreboard-btn">
+                    <a href="#">Scoreboard</a>
+                </li>
                 <!--</div>-->
             </ul>
         </div>
 
         <div class="col-sm-10 col-sm-offset-2 main">
-            <h1 class="page-header">Questions</h1>
-            
             <div id='answer-area'>
                 {% if answer %}
                 <pre>{{ answer }}</pre>
@@ -55,7 +59,4 @@
 {% block scripts %}
     {{super()}}
     <script src={{url_for('static', filename='js/app.js')}}></script>
-    <script src={{url_for('static', filename='js/prism.js')}}></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/pagination.js') }}"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
 {% endblock %}
