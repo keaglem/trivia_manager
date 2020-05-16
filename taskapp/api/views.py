@@ -93,3 +93,15 @@ def question(question_id=None):
 def responses():
     all_questions = Question.query.all()
     return render_template('api/responses.html', all_questions=all_questions)
+
+@blueprint.route('/scoreboard')
+def scoreboard():
+    all_users = User.query.all()
+    scoreboard = []
+    for user in all_users:
+        points = [answer.points_received if answer.points_received else 0 for answer in user.answers]
+        scoreboard.append([user.name, sum(points)])
+    scoreboard.sort(key=lambda x: x[1], reverse=True)
+    return render_template('api/scoreboard.html', scoreboard=scoreboard)
+
+    

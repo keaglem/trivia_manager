@@ -4,6 +4,7 @@ App = {
         displayArea: $('#display-area'),
         questionButton: $('#question-btn'),
         responsesButton: $('#responses-btn'),
+        scoreboardButton: $('#scoreboard-btn'),
         answerArea: $('#answer-area'),
         lastClicked: $('#question-btn'),
         topNavBar: $('#top-nav-bar'),
@@ -54,6 +55,7 @@ App = {
     bindUIActions: function() {
         s.questionButton.click(App.handleButtonClick(App.showQuestions));
         s.responsesButton.click(App.handleButtonClick(App.showResponses));
+        s.scoreboardButton.click(App.handleButtonClick(App.showScoreboard));
     },
 
     loadNoCache: function(elem, url, success) {
@@ -85,6 +87,10 @@ App = {
     showResponses: function(e) {
         s.answerArea.empty();
         s.displayArea.load('/api/responses');
+    },
+    showScoreboard: function(e) {
+        s.answerArea.empty();
+        s.displayArea.load('/api/scoreboard');
     },
 
 };
